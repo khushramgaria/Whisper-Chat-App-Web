@@ -1,6 +1,6 @@
 import express from "express";
-import router from "./routes/routes.js";
 import { clerkMiddleware } from "@clerk/express";
+import router from "./routes/routes.js";
 import { errorHandler } from "./middleware/errorHandler.middleware.js";
 
 const app = express();
