@@ -1,20 +1,15 @@
 import mongoose, { Schema, type Document } from "mongoose";
 
 export interface IUser extends Document {
-  clerkId: string;
   name: string;
   email: string;
-  avatar: string;
+  password: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
 const userSchema = new Schema<IUser>(
   {
-    clerkId: {
-      type: String,
-      required: true,
-    },
     name: {
       type: String,
       required: true,
@@ -27,9 +22,9 @@ const userSchema = new Schema<IUser>(
       lowercase: true,
       trim: true,
     },
-    avatar: {
+    password: {
       type: String,
-      default: "",
+      required: true,
     },
   },
   { timestamps: true },

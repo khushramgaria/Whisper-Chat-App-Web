@@ -11,7 +11,7 @@ export const getChats = async (
     const userId = req.userId;
 
     const chats = await Chat.find({ participants: userId })
-      .populate("participants", "_id name email avatar")
+      .populate("participants", "_id name email")
       .populate("lastMessage")
       .sort({ lastMessageAt: -1 });
 
@@ -67,7 +67,7 @@ export const getOrCreateChat = async (
     let chat = await Chat.findOne({
       participants: { $all: [userId, participantId] },
     })
-      .populate("participants", "_id name email avatar")
+      .populate("participants", "_id name email")
       .populate("lastMessage");
 
     if (!chat) {
@@ -75,7 +75,7 @@ export const getOrCreateChat = async (
         participants: [userId, participantId],
       });
       await newChat.save();
-      chat = await newChat.populate("participants", "_id name email avatar");
+      chat = await newChat.populate("participants", "_id name email");
     }
 
     const otherParticipant = chat.participants.find(

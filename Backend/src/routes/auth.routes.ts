@@ -1,13 +1,15 @@
 import { Router } from "express";
-import { authMiddleware } from "../middleware/auth.middleware.js";
+import { verifyAuth } from "../middleware/auth.middleware.js";
 import {
-  authCallback,
   getCurrentUser,
+  loginUser,
+  registerUser,
 } from "../controllers/auth.controller.js";
 
 const router = Router();
 
-router.get("/me", authMiddleware, getCurrentUser);
-router.post("/callback", authCallback);
+router.post("/register", registerUser);
+router.post("/login", loginUser);
+router.get("/me", verifyAuth, getCurrentUser);
 
 export default router;

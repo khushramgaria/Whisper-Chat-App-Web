@@ -17,8 +17,13 @@ export const getMessages = async (
       participants: userId,
     });
 
+    if (!chat) {
+      res.status(404).json({ message: "Chat not found" });
+      return;
+    }
+
     const messages = await Message.find({ chat: chatId })
-      .populate("sender", "_id name email avatar")
+      .populate("sender", "_id name email")
       .sort({ createdAt: 1 });
 
     return res.status(200).json({

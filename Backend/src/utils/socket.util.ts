@@ -1,9 +1,9 @@
 import { Socket, Server as SocketServer } from "socket.io";
 import { Server as HttpServer } from "http";
-import { verifyToken } from "@clerk/express";
 import { Message } from "../models/message.model.js";
 import { Chat } from "../models/chat.model.js";
 import { User } from "../models/user.model.js";
+import { verifyAccessToken } from "./jwt.util.js";
 
 // store online users in the memory: userId -> socketid
 export const onlineUsers: Map<string, string> = new Map();
@@ -18,16 +18,26 @@ export const initializeSocket = (httpServer: HttpServer) => {
     const token = socket.handshake.auth.token;
 
     if (!token) {
-      return next(new Error("Authentication error"));
+      return next(new Error("Authentication error: No token provided"));
     }
 
     try {
-      const session = await verifyToken(token, {
-        secretKey: process.env.CLERK_SECRET_KEY!,
-      });
-      const clerkId = session.sub;
+      // Verify the JWT token (same as verifyAccessToken in your middleware)
+      const decodedToken = await verifyAccessToken(token);
 
-      const user = await User.findOne({ clerkId });
+      // Validate decoded token structure (matches your HTTP middleware)
+      if (
+        !decodedToken ||
+        typeof decodedToken !== "object" ||
+        !("id" in decodedToken) ||
+        typeof (decodedToken as any).id !== "string"
+      ) {
+        return next(
+          new Error("Authentication error: Invalid or expired token"),
+        );
+      }
+
+      const user = await User.findById(decodedToken.id);
 
       if (!user) {
         return next(new Error("Authentication error: User not found"));

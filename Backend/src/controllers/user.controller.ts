@@ -11,7 +11,7 @@ export const getUsers = async (
     const userId = req.userId;
 
     const users = await User.find({ _id: { $ne: userId } }).select(
-      "_id name email avatar",
+      "_id name email",
     );
 
     return res.status(200).json({
