@@ -4,6 +4,7 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import PressableButton from "@/components/ui/PressableButton";
 import BrandingSection from "@/components/auth/BrandingSection";
+import ButtonGroup from "@/components/ui/ButtonGroup";
 
 const { width, height } = Dimensions.get("window");
 
@@ -38,7 +39,7 @@ const AuthScreen = () => {
         </View>
 
         {/* AUTH BUTTONS */}
-        <View className="flex-row gap-4 mt-10">
+        <ButtonGroup className="mt-10">
           {/* Login BTN */}
           <PressableButton
             key="login-button"
@@ -53,7 +54,7 @@ const AuthScreen = () => {
             onPress={() => router.push("/(auth)/register")}
             btnType="outline"
           />
-        </View>
+        </ButtonGroup>
       </View>
     </View>
   );

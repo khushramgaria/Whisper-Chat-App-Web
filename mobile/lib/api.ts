@@ -3,3 +3,4 @@ export const BACKEND_URL =
 
 export const loginAPI = `${BACKEND_URL}/auth/login`
 export const registerAPI = `${BACKEND_URL}/auth/register`
+export const getCurrentUserAPI = `${BACKEND_URL}/auth/me`

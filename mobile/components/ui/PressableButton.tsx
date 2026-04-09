@@ -1,11 +1,17 @@
 import React from "react";
-import { Text, Pressable, PressableProps } from "react-native";
+import {
+  Text,
+  Pressable,
+  PressableProps,
+  ActivityIndicator,
+} from "react-native";
 
 interface PressableButtonProps extends PressableProps {
   name: string;
   role?: "button" | "link";
   btnType?: "filled" | "outline";
   children?: React.ReactNode;
+  isLoading?: boolean;
 }
 
 const PressableButton = ({
@@ -15,6 +21,7 @@ const PressableButton = ({
   disabled,
   role = "button",
   btnType = "filled",
+  isLoading = false,
   ...rest
 }: PressableButtonProps) => {
   return (
@@ -27,6 +34,7 @@ const PressableButton = ({
       {...rest}
     >
       {children}
+      {isLoading && <ActivityIndicator size="small" color="#1a1a1a" />}
       <Text
         className={`${btnType === "filled" ? "text-gray-900" : "text-white"} font-semibold uppercase text-lg`}
       >
