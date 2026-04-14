@@ -9,6 +9,7 @@ import { loginAPI } from "@/lib/api";
 import ButtonGroup from "@/components/ui/ButtonGroup";
 import BackButton from "@/components/ui/BackButton";
 import SignInSignUpSections from "@/components/ui/SignInSignUpSections";
+import { saveToken } from "@/lib/token";
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -25,19 +26,9 @@ const LoginScreen = () => {
     try {
       const res = await axios.post(loginAPI, formData);
 
-      if (res.data.success) {
-        Alert.alert(
-          "Login Successful",
-          res.data.message || "You have logged in successfully!",
-          [
-            {
-              text: "OK",
-              onPress: () => {
-                router.push("/(tabs)");
-              },
-            },
-          ],
-        );
+      if (res.data?.success) {
+        await saveToken(res?.data?.data?.accessToken);
+        router.push("/(tabs)");
       }
     } catch (error: unknown) {
       const errMsg =

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { getCurrentUserAPI } from "@/lib/api";
 import axios from "axios";
+import { getToken } from "@/lib/token";
 
 interface User {
   id: string;
@@ -15,7 +16,7 @@ export const useGetCurrentUser = () => {
   const getCurrentUser = async () => {
     setLoading(true);
     try {
-      const token: string = "<your_token_here>";
+      const token: string | null = await getToken();
 
       const res = await axios.get(getCurrentUserAPI, {
         headers: {
