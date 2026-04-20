@@ -2,7 +2,7 @@ import ChatItem from "@/components/chat/ChatItem";
 import Header from "@/components/chat/Header";
 import EmptyUI from "@/components/ui/EmptyUI";
 import { useChats } from "@/hooks/useChats";
-// import { chats } from "@/lib/dummyChats";
+import { chats } from "@/lib/dummyChats";
 import { Chat } from "@/types";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -10,7 +10,7 @@ import { View, Text, ActivityIndicator, FlatList } from "react-native";
 
 const ChatsTab = () => {
   const router = useRouter();
-  const { data: chats, isLoading, error } = useChats();
+  const { data, isLoading, error } = useChats();
 
   if (isLoading) {
     return (
@@ -20,13 +20,13 @@ const ChatsTab = () => {
     );
   }
 
-  if (error) {
-    return (
-      <View className="flex-1 justify-center items-center bg-surface">
-        <Text className="text-red-500">Failed to load chats</Text>
-      </View>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <View className="flex-1 justify-center items-center bg-surface">
+  //       <Text className="text-red-500">Failed to load chats</Text>
+  //     </View>
+  //   );
+  // }
 
   const handleChatPress = async (chat: Chat) => {
     router.push({
@@ -64,7 +64,7 @@ const ChatsTab = () => {
             iconColor="#6B6B70"
             iconSize={64}
             buttonLabel="New Chat"
-            onPressButton={() => console.log("pressed")}
+            onPressButton={() => router.push("/(modals)/new-chat")}
           />
         }
       />

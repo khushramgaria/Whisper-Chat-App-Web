@@ -1,7 +1,8 @@
 import axios from "axios";
 import { BACKEND_URL } from "./api";
-import { getToken } from "./token";
+import { getToken, removeToken } from "./token";
 import { useCallback } from "react";
+import { router } from "expo-router";
 
 const api = axios.create({
   baseURL: BACKEND_URL,
@@ -13,16 +14,11 @@ const api = axios.create({
 // Response interceptor registered once
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response) {
-      console.log(
-        `API request failed: ${error.config?.method?.toUpperCase()} ${error.config?.url}`,
-      );
-    } else if (error.request) {
-      console.log("API request failed - no response", {
-        endpoint: error.config?.url,
-        method: error.config?.method,
-      });
+  async (error) => {
+    if (error.response?.status === 401) {
+      // Token expired or invalid
+      await removeToken();
+      router.replace("/(auth)"); // ✅ force back to login
     }
     return Promise.reject(error);
   },

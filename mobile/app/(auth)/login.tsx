@@ -10,9 +10,11 @@ import ButtonGroup from "@/components/ui/ButtonGroup";
 import BackButton from "@/components/ui/BackButton";
 import SignInSignUpSections from "@/components/ui/SignInSignUpSections";
 import { saveToken } from "@/lib/token";
+import { useAuth } from "@/context/AuthContext";
 
 const LoginScreen = () => {
   const router = useRouter();
+  const { login } = useAuth();
   const [formData, setFormData] = useState<{ email: string; password: string }>(
     {
       email: "",
@@ -22,14 +24,14 @@ const LoginScreen = () => {
   const [loading, setLoading] = useState(false);
 
   const loginHandler = async () => {
+    if (!formData.email || !formData.password) {
+      Alert.alert("Missing Fields", "Please enter your email and password.");
+      return;
+    }
     setLoading(true);
     try {
-      const res = await axios.post(loginAPI, formData);
-
-      if (res.data?.success) {
-        await saveToken(res?.data?.data?.accessToken);
-        router.push("/(tabs)");
-      }
+      await login(formData.email, formData.password);
+      router.replace("/(tabs)");
     } catch (error: unknown) {
       const errMsg =
         (error as Error)?.response?.data?.message ||

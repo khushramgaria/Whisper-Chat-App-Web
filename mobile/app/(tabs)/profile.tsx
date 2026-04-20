@@ -3,8 +3,10 @@ import React from "react";
 import { MENU_SECTIONS } from "@/lib/constants";
 import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "@/context/AuthContext";
 
 const ProfileTab = () => {
+  const { logout } = useAuth();
   return (
     <ScrollView
       className="bg-surface-dark"
@@ -91,7 +93,7 @@ const ProfileTab = () => {
       {/* Logout Button */}
       <Pressable
         className="mx-5 mt-8 bg-red-500/10 rounded-2xl py-4 items-center active:opacity-70 border border-red-500/20"
-        // onPress={() => signOut()}
+        onPress={() => logout()}
       >
         <View className="flex-row items-center">
           <Ionicons name="log-out-outline" size={20} color="#EF4444" />

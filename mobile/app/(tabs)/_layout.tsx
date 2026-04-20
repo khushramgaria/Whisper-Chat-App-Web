@@ -1,11 +1,22 @@
 import React from "react";
 import { NativeTabs, Icon, Label } from "expo-router/unstable-native-tabs";
 import { Redirect } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
+import { ActivityIndicator, View } from "react-native";
 
 const TabsLayout = () => {
-  const isSignedIn = true; // TODO: Implement actual sign-in logic
+  const { isSignedIn, isLoading } = useAuth();
 
-  if (!isSignedIn) return <Redirect href={"/(auth)"} />;
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#f97316" />
+      </View>
+    );
+  }
+
+  // ✅ Not logged in → back to auth
+  if (!isSignedIn) return <Redirect href="/(auth)" />;
 
   return (
     <NativeTabs
